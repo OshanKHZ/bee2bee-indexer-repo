@@ -1,0 +1,71 @@
+{
+  "name": "n8n-nodes-bee2bee-indexer",
+  "version": "0.1.0",
+  "description": "n8n node to index GitHub repositories and generate embeddings for RAG",
+  "keywords": [
+    "n8n-community-node-package",
+    "github",
+    "indexer",
+    "embeddings",
+    "rag",
+    "vector",
+    "ai"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/heronlancellot/bee2bee",
+  "author": {
+    "name": "Bee2Bee Team",
+    "email": "team@bee2bee.ai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heronlancellot/bee2bee.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/Bee2BeeIndexerApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Bee2BeeIndexer/Bee2BeeIndexer.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint-plugin-n8n-nodes-base": "^1.11.0",
+    "gulp": "^4.0.2",
+    "n8n-workflow": "*",
+    "prettier": "^2.7.1",
+    "typescript": "^4.9.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "tree-sitter": "^0.21.0",
+    "tree-sitter-python": "^0.21.0",
+    "tree-sitter-javascript": "^0.21.0",
+    "tree-sitter-typescript": "^0.21.0",
+    "tree-sitter-rust": "^0.21.0",
+    "tree-sitter-go": "^0.21.0",
+    "tree-sitter-java": "^0.21.0",
+    "tree-sitter-c": "^0.21.0",
+    "tree-sitter-cpp": "^0.22.0",
+    "sentence-transformers": "^2.3.0",
+    "openai": "^4.0.0",
+    "inflection": "^2.0.1"
+  }
+}
