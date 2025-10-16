@@ -1,6 +1,6 @@
 {
   "name": "@oshankhz/n8n-nodes-bee2bee-indexer",
-  "version": "0.1.0",
+  "version": "0.1.7",
   "description": "n8n node to index GitHub repositories and generate embeddings for RAG",
   "keywords": [
     "n8n-community-node-package",
@@ -22,8 +22,7 @@
     "url": "git+https://github.com/OshanKHZ/bee2bee-indexer-repo.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public"
   },
   "main": "index.js",
   "scripts": {
@@ -35,7 +34,9 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "dist"
+    "dist",
+    "cli.py",
+    "src"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
