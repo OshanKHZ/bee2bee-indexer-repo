@@ -1,0 +1,39 @@
+name: Publish n8n Node to GitHub Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v0.1.0
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@heronlancellot'
+
+      - name: Install dependencies
+        working-directory: ./n8n-node
+        run: npm ci
+
+      - name: Build package
+        working-directory: ./n8n-node
+        run: npm run build
+
+      - name: Publish to GitHub Packages
+        working-directory: ./n8n-node
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
