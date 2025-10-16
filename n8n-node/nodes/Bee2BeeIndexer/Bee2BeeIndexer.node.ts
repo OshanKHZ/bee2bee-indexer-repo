@@ -1,14 +1,108 @@
 import {
-	IExecuteFunctions,
-} from 'n8n-core';
-
-import {
 	IDataObject,
+	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
 	NodeOperationError,
 } from 'n8n-workflow';
+
+// Helper function to call Python CLI
+async function indexRepository(params: {
+	owner: string;
+	repo: string;
+	branch: string;
+	githubToken: string;
+	openaiApiKey: string;
+	embeddingProvider: string;
+	outputFormat: string;
+	maxFiles: number;
+	fileExtensions: string[];
+	excludePatterns: string[];
+	includeDocstrings: boolean;
+	chunkStrategy: string;
+}): Promise<IDataObject> {
+	const {
+		owner,
+		repo,
+		branch,
+		githubToken,
+		openaiApiKey,
+		embeddingProvider,
+		outputFormat,
+		maxFiles,
+		fileExtensions,
+		excludePatterns,
+		includeDocstrings,
+		chunkStrategy,
+	} = params;
+
+	// Call Python CLI
+	const { spawn } = require('child_process');
+	const path = require('path');
+
+	// Find the Python CLI script (assumes it's in the parent directory of n8n-node)
+	const cliPath = path.join(__dirname, '../../../cli.py');
+
+	// Prepare config for Python CLI
+	const config = {
+		owner,
+		repo,
+		branch,
+		githubToken,
+		openaiApiKey,
+		embeddingProvider,
+		outputFormat,
+		maxFiles,
+		fileExtensions,
+		excludePatterns,
+		includeDocstrings,
+		chunkStrategy,
+	};
+
+	return new Promise((resolve, reject) => {
+		// Spawn Python process
+		const python = spawn('python', [cliPath]);
+
+		let stdout = '';
+		let stderr = '';
+
+		// Collect stdout
+		python.stdout.on('data', (data: Buffer) => {
+			stdout += data.toString();
+		});
+
+		// Collect stderr
+		python.stderr.on('data', (data: Buffer) => {
+			stderr += data.toString();
+		});
+
+		// Handle completion
+		python.on('close', (code: number) => {
+			if (code !== 0) {
+				// Try to parse error JSON from stdout
+				try {
+					const errorResult = JSON.parse(stdout);
+					reject(new Error(errorResult.error || stderr));
+				} catch {
+					reject(new Error(`Python CLI failed: ${stderr}`));
+				}
+				return;
+			}
+
+			try {
+				const result = JSON.parse(stdout);
+				resolve(result);
+			} catch (error: any) {
+				reject(new Error(`Failed to parse Python CLI output: ${error.message}`));
+			}
+		});
+
+		// Send config via stdin
+		python.stdin.write(JSON.stringify(config));
+		python.stdin.end();
+	});
+}
 
 export class Bee2BeeIndexer implements INodeType {
 	description: INodeTypeDescription = {
@@ -228,9 +322,8 @@ export class Bee2BeeIndexer implements INodeType {
 					const includeDocstrings = additionalOptions.includeDocstrings !== false;
 					const chunkStrategy = additionalOptions.chunkStrategy as string || 'function';
 
-					// TODO: Import and use the Python indexer
-					// For now, we'll create a mock response structure
-					const result = await this.indexRepository({
+					// Call Python indexer
+					const result = await indexRepository({
 						owner,
 						repo,
 						branch,
@@ -261,101 +354,5 @@ export class Bee2BeeIndexer implements INodeType {
 		}
 
 		return [this.helpers.returnJsonArray(returnData)];
-	}
-
-	private async indexRepository(params: {
-		owner: string;
-		repo: string;
-		branch: string;
-		githubToken: string;
-		openaiApiKey: string;
-		embeddingProvider: string;
-		outputFormat: string;
-		maxFiles: number;
-		fileExtensions: string[];
-		excludePatterns: string[];
-		includeDocstrings: boolean;
-		chunkStrategy: string;
-	}): Promise<IDataObject> {
-		const {
-			owner,
-			repo,
-			branch,
-			githubToken,
-			openaiApiKey,
-			embeddingProvider,
-			outputFormat,
-			maxFiles,
-			fileExtensions,
-			excludePatterns,
-			includeDocstrings,
-			chunkStrategy,
-		} = params;
-
-		// Call Python CLI
-		const { spawn } = require('child_process');
-		const path = require('path');
-
-		// Find the Python CLI script (assumes it's in the parent directory of n8n-node)
-		const cliPath = path.join(__dirname, '../../../cli.py');
-
-		// Prepare config for Python CLI
-		const config = {
-			owner,
-			repo,
-			branch,
-			githubToken,
-			openaiApiKey,
-			embeddingProvider,
-			outputFormat,
-			maxFiles,
-			fileExtensions,
-			excludePatterns,
-			includeDocstrings,
-			chunkStrategy,
-		};
-
-		return new Promise((resolve, reject) => {
-			// Spawn Python process
-			const python = spawn('python', [cliPath]);
-
-			let stdout = '';
-			let stderr = '';
-
-			// Collect stdout
-			python.stdout.on('data', (data: Buffer) => {
-				stdout += data.toString();
-			});
-
-			// Collect stderr
-			python.stderr.on('data', (data: Buffer) => {
-				stderr += data.toString();
-			});
-
-			// Handle completion
-			python.on('close', (code: number) => {
-				if (code !== 0) {
-					// Try to parse error JSON from stdout
-					try {
-						const errorResult = JSON.parse(stdout);
-						reject(new Error(errorResult.error || stderr));
-					} catch {
-						reject(new Error(`Python CLI failed: ${stderr}`));
-					}
-					return;
-				}
-
-				try {
-					const result = JSON.parse(stdout);
-					resolve(result);
-				} catch (error) {
-					reject(new Error(`Failed to parse Python CLI output: ${error.message}`));
-				}
-			});
-
-			// Send config via stdin
-			python.stdin.write(JSON.stringify(config));
-			python.stdin.end();
-		});
 	}
 }
