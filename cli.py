@@ -176,8 +176,8 @@ async def index_repository(config: Dict[str, Any]) -> Dict[str, Any]:
                 "code": chunk.code,
                 "metadata": {
                     "file_path": chunk.file_path,
-                    "language": chunk.language.value,
-                    "chunk_type": chunk.chunk_type.value,
+                    "language": chunk.language,  # Already a string due to use_enum_values = True
+                    "chunk_type": chunk.chunk_type,  # Already a string due to use_enum_values = True
                     "name": chunk.name,
                     "signature": chunk.signature,
                     "docstring": chunk.docstring if include_docstrings else None,
@@ -207,7 +207,7 @@ async def index_repository(config: Dict[str, Any]) -> Dict[str, Any]:
                 {
                     "code": c.code,
                     "name": c.name,
-                    "chunk_type": c.chunk_type.value,
+                    "chunk_type": c.chunk_type,  # Already a string due to use_enum_values = True
                     "signature": c.signature,
                     "docstring": c.docstring,
                     "file_path": c.file_path,

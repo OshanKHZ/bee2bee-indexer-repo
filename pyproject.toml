@@ -65,9 +65,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/heronlancellot/hackglobal-2025"
-Documentation = "https://github.com/heronlancellot/hackglobal-2025/tree/main/bee2bee-indexer"
-Repository = "https://github.com/heronlancellot/hackglobal-2025"
+Homepage = "https://github.com/oshankhz/hackglobal-2025"
+Documentation = "https://github.com/oshankhz/hackglobal-2025/tree/main/bee2bee-indexer"
+Repository = "https://github.com/oshankhz/hackglobal-2025"
 
 [tool.setuptools]
 packages = ["bee2bee_indexer"]

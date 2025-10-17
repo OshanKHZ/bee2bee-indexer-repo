@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@heronlancellot'
+          scope: '@oshankhz'
 
       - name: Install dependencies
         working-directory: ./n8n-node

@@ -1,6 +1,6 @@
 {
   "name": "@oshankhz/n8n-nodes-bee2bee-indexer",
-  "version": "0.1.7",
+  "version": "0.1.10",
   "description": "n8n node to index GitHub repositories and generate embeddings for RAG",
   "keywords": [
     "n8n-community-node-package",

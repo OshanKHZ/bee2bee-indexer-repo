@@ -25,7 +25,7 @@ Bee2Bee Indexer is a powerful tool for indexing GitHub repositories and generati
 
 ```bash
 # Clone the repository
-git clone https://github.com/heronlancellot/bee2bee-indexer.git
+git clone https://github.com/oshankhz/bee2bee-indexer.git
 cd bee2bee-indexer
 
 # Install Python dependencies
@@ -83,19 +83,9 @@ python cli.py < config.json > output.json
 
 Install as a custom community node in n8n:
 
-### Via GitHub Packages (Private)
-
-1. Configure npm registry:
-```bash
-# Create .npmrc in your n8n directory
-echo "@heronlancellot:registry=https://npm.pkg.github.com" >> ~/.n8n/.npmrc
-echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> ~/.n8n/.npmrc
-```
-
-2. Install in n8n UI:
    - Go to **Settings → Community Nodes**
    - Click **Install**
-   - Enter: `@heronlancellot/n8n-nodes-bee2bee-indexer`
+   - Enter: `@oshankhz/n8n-nodes-bee2bee-indexer`
 
 ### Example Workflow
 
@@ -182,7 +172,7 @@ CHUNK_MAX_SIZE=2000
 
 ```bash
 # Clone repository
-git clone https://github.com/heronlancellot/bee2bee-indexer.git
+git clone https://github.com/oshankhz/bee2bee-indexer.git
 cd bee2bee-indexer
 
 # Create virtual environment
@@ -223,30 +213,11 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📊 Performance
-
-Benchmarks on `facebook/react` repository:
-
-- **Files processed**: 1,234
-- **Chunks generated**: 8,567
-- **Processing time**: ~45 seconds (local embeddings)
-- **Memory usage**: ~2GB peak
-
-## 🗺️ Roadmap
-
-- [ ] Support for more languages (Swift, Kotlin, Ruby)
-- [ ] Incremental indexing with webhook support
-- [ ] Built-in vector database integrations
-- [ ] Semantic code search UI
-- [ ] Multi-repository indexing
-- [ ] Code change detection and re-indexing
-- [ ] Public npm package release
-- [ ] PyPI package release
 
 ## 🙏 Acknowledgments
 
 - [tree-sitter](https://tree-sitter.github.io/) for parsing
-- [sentence-transformers](https://www.sbert.net/) for embeddings
+- [sentence-transformers](https://www.sbert.net/) for local embeddings
 - [n8n](https://n8n.io/) for workflow automation
 - [OpenAI](https://openai.com/) for embedding APIs
 
@@ -259,7 +230,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Bee2Bee Indexer is part of the Bee2Bee ecosystem, building tools to help developers work smarter with AI.
 
 - Website: https://bee2bee.ai
-- GitHub: https://github.com/heronlancellot
+- GitHub: https://github.com/oshankhz
 - Documentation: https://docs.bee2bee.ai
 
 ---

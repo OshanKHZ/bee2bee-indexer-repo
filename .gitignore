@@ -60,3 +60,6 @@ Thumbs.db
 # Build artifacts
 *.whl
 *.tar.gz
+
+node_modules/*
+docs/*
